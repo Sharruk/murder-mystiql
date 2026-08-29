@@ -14,22 +14,48 @@ AnswerType = Literal["text", "number", "exact", "case_insensitive"]
 
 
 @dataclass
+class Participant:
+    id: str = field(default_factory=lambda: str(uuid4()))
+    firebase_uid: str = ""
+    email: str = ""
+    display_name: str | None = None
+    photo_url: str | None = None
+    email_verified: bool = True
+    is_qualified: bool = False
+    created_at: datetime = field(default_factory=now_utc)
+    last_login_at: datetime = field(default_factory=now_utc)
+
+
+@dataclass
 class EventConfig:
     wrong_answer_penalty_minutes: int = 5
     wrong_answer_lock_seconds: int = 60
     allow_pause: bool = False
     hint_penalty_default_minutes: int = 2
+    max_query_rows: int = 200
+    query_timeout_ms: int = 3000
+    quiz_required: bool = True
+    quiz_qualify_score: int = 3
+
+
+@dataclass
+class Story:
+    title: str = "LCU: ECLIPSE"
+    prologue: str = "The foundation of the South Indian narcotics corridor rests on three cataclysms: Trichy (2019), Chennai (2022), and Theog (2023)..."
+    description: str = "A relational investigation into the ghost shipments and showdown of the LCU Eclipse case."
+    disclaimer: str = "LCU: ECLIPSE is fan-made fiction created for entertainment and mystery-game purposes. It is not official canon of the Lokesh Cinematic Universe."
 
 
 @dataclass
 class Event:
-    id: str = field(default_factory=lambda: str(uuid4()))
-    slug: str = "murder-mystiql"
-    name: str = "MURDER MYSTIQL"
-    tagline: str = "A configurable investigation engine"
-    description: str = "A story-independent platform for running data-driven investigations."
-    status: str = "draft"
+    id: str = "e0000000-0000-0000-0000-000000000001"
+    slug: str = "invente-2026"
+    name: str = "MURDER MYSTIQL: LCU ECLIPSE"
+    tagline: str = "Invente 2026 SQL Investigation Challenge"
+    description: str = "A high-stakes relational SQL mystery set in the aftermath of the Das & Co collapse."
+    status: str = "live"
     config: EventConfig = field(default_factory=EventConfig)
+    story: Story = field(default_factory=Story)
 
 
 @dataclass
@@ -38,7 +64,8 @@ class Level:
     event_id: str
     level_number: int
     title: str
-    description: str | None = None
+    narrative_context: str | None = None
+    objective: str = ""
     clue: str | None = None
     answer_type: AnswerType = "case_insensitive"
     answer_values: list[str] = field(default_factory=list)
@@ -59,6 +86,7 @@ class InvestigationTable:
     label: str
     columns: list[TableColumn] = field(default_factory=list)
     unlock_level: int = 1
+    description: str | None = None
     visible: bool = True
 
 
@@ -70,6 +98,7 @@ class Hint:
     body: str
     penalty_minutes: int = 2
     repeatable: bool = False
+    sort_order: int = 0
 
 
 @dataclass
@@ -78,6 +107,7 @@ class Session:
     event_id: str
     team_name: str
     started_at: datetime
+    participant_id: str | None = None
     finish_at: datetime | None = None
     current_level_number: int = 1
     completed_level_numbers: set[int] = field(default_factory=set)
@@ -88,6 +118,7 @@ class Session:
     status: str = "IN_PROGRESS"
     last_submission_at: datetime | None = None
     created_at: datetime = field(default_factory=now_utc)
+    quiz_passed: bool = False
 
     @property
     def actual_duration_seconds(self) -> int:
@@ -122,6 +153,21 @@ class AnswerSubmission:
     created_at: datetime = field(default_factory=now_utc)
 
 
+@dataclass
+class QuizQuestion:
+    id: str
+    prompt: str
+    points: int = 1
+    options: list[QuizOption] = field(default_factory=list)
+
+
+@dataclass
+class QuizOption:
+    id: str
+    option_text: str
+    is_correct: bool = False
+
+
 def public_level(level: Level, session: Session | None = None) -> dict[str, Any]:
     completed = session is not None and level.level_number in session.completed_level_numbers
     unlocked = session is None or level.level_number <= session.current_level_number
@@ -129,7 +175,8 @@ def public_level(level: Level, session: Session | None = None) -> dict[str, Any]
         "id": level.id,
         "level_number": level.level_number,
         "title": level.title,
-        "description": level.description,
+        "narrative_context": level.narrative_context,
+        "objective": level.objective,
         "clue": level.clue,
         "answer_type": level.answer_type,
         "active": level.active,

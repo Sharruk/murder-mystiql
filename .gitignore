@@ -4,6 +4,11 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .env
+.env.local
 .venv/
 *.log
 .DS_Store
+*firebase-adminsdk*.json
+*service-account*.json
+credentials*.json
+*.docx
