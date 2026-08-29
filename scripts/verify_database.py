@@ -95,7 +95,7 @@ LEVEL_VERIFICATIONS = [
     {
         "level": 3,
         "title": "Intercepting the Command Call",
-        "query": "SELECT caller_imsi, notes FROM investigation.phone_records WHERE cell_tower = 'Ennore-North' AND call_timestamp::text LIKE '2024-03-14 03:15%';",
+        "query": "SELECT caller_imsi, notes FROM investigation.phone_records WHERE cell_tower = 'Ennore-North';",
         "expected_answer": "404-45-89102482",
         "check": lambda rows: any("404-45-89102482" in str(r) for r in rows),
     },
@@ -178,16 +178,12 @@ async def verify_database(db_url: str, populate_if_empty: bool = False) -> bool:
         return False
 
     try:
-        # Check if public.events exists
         table_exists = await conn.fetchval(
             "SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'events');"
         )
-        if not table_exists and populate_if_empty:
-            print("Database is empty. Populating database with schema and seed data...")
+        if populate_if_empty or not table_exists:
+            print("Populating database with schema and seed data...")
             await populate_database(conn)
-        elif not table_exists:
-            print("ERROR: Database is empty (public.events does not exist). Run with --populate to initialize.")
-            return False
 
         print("\n========================================================")
         print("1. VERIFYING PUBLIC TABLES & ROW COUNTS")

@@ -54,7 +54,7 @@ insert into public.stories (
   disclaimer,
   status
 ) values (
-  's0000000-0000-0000-0000-000000000001',
+  'a0000000-0000-0000-0000-000000000001',
   'e0000000-0000-0000-0000-000000000001',
   'LCU: ECLIPSE',
   'The foundation of the South Indian narcotics corridor rests on three cataclysms: Trichy (2019), Chennai (2022), and Theog (2023). When a dormant 20-year automated maintenance protocol in Theog triggers a backdated shipment of Compound-9 to Ennore Port under Scorpion Maritime, Rolex discovers that Leo Das is alive and operating as Parthiban. A lethal war converges across Nellore, Ranipet, and Royapuram Port.',
@@ -74,7 +74,7 @@ delete from public.investigation_tables where event_id = 'e0000000-0000-0000-000
 insert into public.investigation_tables (id, event_id, table_name, display_label, schema_name, unlock_level, description, columns_metadata)
 values
 (
-  't0000000-0000-0000-0000-000000000001',
+  'b0000000-0000-0000-0000-000000000001',
   'e0000000-0000-0000-0000-000000000001',
   'shipments',
   'Port Cargo Shipments',
@@ -84,7 +84,7 @@ values
   '[{"name":"shipment_id","data_type":"text","is_primary_key":true},{"name":"container_number","data_type":"text"},{"name":"vessel_name","data_type":"text"},{"name":"imo_number","data_type":"text"},{"name":"declared_manifest","data_type":"text"},{"name":"actual_cargo","data_type":"text"},{"name":"origin","data_type":"text"},{"name":"destination","data_type":"text"},{"name":"arrival_timestamp","data_type":"timestamptz"},{"name":"clearance_status","data_type":"text"}]'::jsonb
 ),
 (
-  't0000000-0000-0000-0000-000000000002',
+  'b0000000-0000-0000-0000-000000000002',
   'e0000000-0000-0000-0000-000000000001',
   'locations',
   'Geographic Locations',
@@ -94,7 +94,7 @@ values
   '[{"name":"location_id","data_type":"text","is_primary_key":true},{"name":"name","data_type":"text"},{"name":"state","data_type":"text"},{"name":"latitude","data_type":"numeric(9,4)"},{"name":"longitude","data_type":"numeric(9,4)"},{"name":"description","data_type":"text"},{"name":"significance","data_type":"text"}]'::jsonb
 ),
 (
-  't0000000-0000-0000-0000-000000000003',
+  'b0000000-0000-0000-0000-000000000003',
   'e0000000-0000-0000-0000-000000000001',
   'access_logs',
   'Facility Security Access Logs',
@@ -104,7 +104,7 @@ values
   '[{"name":"log_id","data_type":"text","is_primary_key":true},{"name":"card_or_badge_id","data_type":"text"},{"name":"user_name","data_type":"text"},{"name":"facility_location","data_type":"text"},{"name":"access_timestamp","data_type":"timestamptz"},{"name":"action_description","data_type":"text"}]'::jsonb
 ),
 (
-  't0000000-0000-0000-0000-000000000004',
+  'b0000000-0000-0000-0000-000000000004',
   'e0000000-0000-0000-0000-000000000001',
   'vehicle_records',
   'Vehicle Sightings & Registration',
@@ -114,7 +114,7 @@ values
   '[{"name":"vehicle_id","data_type":"text","is_primary_key":true},{"name":"registration_number","data_type":"text"},{"name":"vehicle_type","data_type":"text"},{"name":"registered_owner","data_type":"text"},{"name":"sighting_location","data_type":"text"},{"name":"sighting_timestamp","data_type":"timestamptz"}]'::jsonb
 ),
 (
-  't0000000-0000-0000-0000-000000000005',
+  'b0000000-0000-0000-0000-000000000005',
   'e0000000-0000-0000-0000-000000000001',
   'phone_records',
   'Cellular Intercepts & Call Logs',
@@ -124,7 +124,7 @@ values
   '[{"name":"call_id","data_type":"text","is_primary_key":true},{"name":"caller_imsi","data_type":"text"},{"name":"receiver_imsi","data_type":"text"},{"name":"caller_name","data_type":"text"},{"name":"receiver_name","data_type":"text"},{"name":"call_timestamp","data_type":"timestamptz"},{"name":"duration_seconds","data_type":"integer"},{"name":"cell_tower","data_type":"text"},{"name":"notes","data_type":"text"}]'::jsonb
 ),
 (
-  't0000000-0000-0000-0000-000000000006',
+  'b0000000-0000-0000-0000-000000000006',
   'e0000000-0000-0000-0000-000000000001',
   'bank_transactions',
   'Financial & Hawala Transactions',
@@ -134,7 +134,7 @@ values
   '[{"name":"transaction_id","data_type":"text","is_primary_key":true},{"name":"sender_account","data_type":"text"},{"name":"receiver_account","data_type":"text"},{"name":"amount","data_type":"numeric(14,2)"},{"name":"transaction_type","data_type":"text"},{"name":"reference_number","data_type":"text"},{"name":"transaction_timestamp","data_type":"timestamptz"}]'::jsonb
 ),
 (
-  't0000000-0000-0000-0000-000000000007',
+  'b0000000-0000-0000-0000-000000000007',
   'e0000000-0000-0000-0000-000000000001',
   'messages',
   'Decrypted Radio & SMS Transmissions',
@@ -144,7 +144,7 @@ values
   '[{"name":"message_id","data_type":"text","is_primary_key":true},{"name":"sender","data_type":"text"},{"name":"receiver","data_type":"text"},{"name":"sent_timestamp","data_type":"timestamptz"},{"name":"message_text","data_type":"text"},{"name":"encryption_type","data_type":"text"}]'::jsonb
 ),
 (
-  't0000000-0000-0000-0000-000000000008',
+  'b0000000-0000-0000-0000-000000000008',
   'e0000000-0000-0000-0000-000000000001',
   'evidence',
   'Forensics & Physical Ballistics',
@@ -154,7 +154,7 @@ values
   '[{"name":"evidence_id","data_type":"text","is_primary_key":true},{"name":"item_name","data_type":"text"},{"name":"recovered_location","data_type":"text"},{"name":"recovery_timestamp","data_type":"timestamptz"},{"name":"forensic_summary","data_type":"text"},{"name":"matching_suspect","data_type":"text"}]'::jsonb
 ),
 (
-  't0000000-0000-0000-0000-000000000009',
+  'b0000000-0000-0000-0000-000000000009',
   'e0000000-0000-0000-0000-000000000001',
   'characters',
   'Dossier of Suspects & Operatives',
@@ -164,7 +164,7 @@ values
   '[{"name":"character_id","data_type":"text","is_primary_key":true},{"name":"full_name","data_type":"text"},{"name":"alias","data_type":"text"},{"name":"primary_role","data_type":"text"},{"name":"location_base","data_type":"text"},{"name":"organization","data_type":"text"},{"name":"status","data_type":"text"}]'::jsonb
 ),
 (
-  't0000000-0000-0000-0000-000000000010',
+  'b0000000-0000-0000-0000-000000000010',
   'e0000000-0000-0000-0000-000000000001',
   'relationships',
   'Syndicate Ties & Kinship Matrix',
@@ -174,7 +174,7 @@ values
   '[{"name":"relationship_id","data_type":"text","is_primary_key":true},{"name":"person_a","data_type":"text"},{"name":"person_b","data_type":"text"},{"name":"relationship_type","data_type":"text"},{"name":"details","data_type":"text"}]'::jsonb
 ),
 (
-  't0000000-0000-0000-0000-000000000011',
+  'b0000000-0000-0000-0000-000000000011',
   'e0000000-0000-0000-0000-000000000001',
   'timeline_events',
   'Master Incident Timeline',
@@ -184,7 +184,7 @@ values
   '[{"name":"event_code","data_type":"text","is_primary_key":true},{"name":"occurred_at","data_type":"timestamptz"},{"name":"location_name","data_type":"text"},{"name":"title","data_type":"text"},{"name":"summary","data_type":"text"},{"name":"key_individuals","data_type":"text"}]'::jsonb
 ),
 (
-  't0000000-0000-0000-0000-000000000012',
+  'b0000000-0000-0000-0000-000000000012',
   'e0000000-0000-0000-0000-000000000001',
   'red_herrings',
   'False Leads & Forged Intel Dossiers',
@@ -194,7 +194,7 @@ values
   '[{"name":"record_id","data_type":"text","is_primary_key":true},{"name":"lead_code","data_type":"text"},{"name":"apparent_theory","data_type":"text"},{"name":"forensic_truth","data_type":"text"},{"name":"debunking_evidence","data_type":"text"}]'::jsonb
 ),
 (
-  't0000000-0000-0000-0000-000000000013',
+  'b0000000-0000-0000-0000-000000000013',
   'e0000000-0000-0000-0000-000000000001',
   'autopsies',
   'Coroner Post-Mortem Reports',
@@ -204,7 +204,7 @@ values
   '[{"name":"autopsy_id","data_type":"text","is_primary_key":true},{"name":"victim_name","data_type":"text"},{"name":"time_of_death","data_type":"timestamptz"},{"name":"location_found","data_type":"text"},{"name":"cause_of_death","data_type":"text"},{"name":"killer_name","data_type":"text"},{"name":"motive","data_type":"text"}]'::jsonb
 ),
 (
-  't0000000-0000-0000-0000-000000000014',
+  'b0000000-0000-0000-0000-000000000014',
   'e0000000-0000-0000-0000-000000000001',
   'kill_records',
   'Final Fatal Confrontation Log',
@@ -230,7 +230,7 @@ insert into public.game_levels (
   active
 ) values
 (
-  'l0000000-0000-0000-0000-000000000001',
+  'c0000000-0000-0000-0000-000000000001',
   'e0000000-0000-0000-0000-000000000001',
   1,
   'The Ghost Shipment at Ennore',
@@ -242,7 +242,7 @@ insert into public.game_levels (
   true
 ),
 (
-  'l0000000-0000-0000-0000-000000000002',
+  'c0000000-0000-0000-0000-000000000002',
   'e0000000-0000-0000-0000-000000000001',
   2,
   'The Security Breach & Customs Bypass',
@@ -254,7 +254,7 @@ insert into public.game_levels (
   true
 ),
 (
-  'l0000000-0000-0000-0000-000000000003',
+  'c0000000-0000-0000-0000-000000000003',
   'e0000000-0000-0000-0000-000000000001',
   3,
   'Intercepting the Command Call',
@@ -266,7 +266,7 @@ insert into public.game_levels (
   true
 ),
 (
-  'l0000000-0000-0000-0000-000000000004',
+  'c0000000-0000-0000-0000-000000000004',
   'e0000000-0000-0000-0000-000000000001',
   4,
   'The Corrupt Deputy in Theog',
@@ -278,7 +278,7 @@ insert into public.game_levels (
   true
 ),
 (
-  'l0000000-0000-0000-0000-000000000005',
+  'c0000000-0000-0000-0000-000000000005',
   'e0000000-0000-0000-0000-000000000001',
   5,
   'The Ambush at Nellore Yard',
@@ -290,7 +290,7 @@ insert into public.game_levels (
   true
 ),
 (
-  'l0000000-0000-0000-0000-000000000006',
+  'c0000000-0000-0000-0000-000000000006',
   'e0000000-0000-0000-0000-000000000001',
   6,
   'The State Intelligence Mole',
@@ -302,7 +302,7 @@ insert into public.game_levels (
   true
 ),
 (
-  'l0000000-0000-0000-0000-000000000007',
+  'c0000000-0000-0000-0000-000000000007',
   'e0000000-0000-0000-0000-000000000001',
   7,
   'The Hawala Trail',
@@ -314,7 +314,7 @@ insert into public.game_levels (
   true
 ),
 (
-  'l0000000-0000-0000-0000-000000000008',
+  'c0000000-0000-0000-0000-000000000008',
   'e0000000-0000-0000-0000-000000000001',
   8,
   'The Siege of Ranipet & Cartel Executions',
@@ -326,7 +326,7 @@ insert into public.game_levels (
   true
 ),
 (
-  'l0000000-0000-0000-0000-000000000009',
+  'c0000000-0000-0000-0000-000000000009',
   'e0000000-0000-0000-0000-000000000001',
   9,
   'The Floating Refinery at Royapuram',
@@ -338,7 +338,7 @@ insert into public.game_levels (
   true
 ),
 (
-  'l0000000-0000-0000-0000-000000000010',
+  'c0000000-0000-0000-0000-000000000010',
   'e0000000-0000-0000-0000-000000000001',
   10,
   'The Apex Execution & Final Deduction',
@@ -355,16 +355,16 @@ delete from public.level_hints where level_id in (select id from public.game_lev
 
 insert into public.level_hints (level_id, title, body, penalty_minutes, sort_order)
 values
-('l0000000-0000-0000-0000-000000000001', 'Inspect Manifests', 'Run: SELECT container_number FROM shipments WHERE destination LIKE ''%Ennore%'' AND declared_manifest LIKE ''%Industrial%'';', 2, 1),
-('l0000000-0000-0000-0000-000000000002', 'Target Gate 7', 'Run: SELECT card_or_badge_id, action_description FROM access_logs WHERE facility_location LIKE ''%Gate 7%'' AND access_timestamp::text LIKE ''2024-03-14%'';', 2, 1),
-('l0000000-0000-0000-0000-000000000003', 'Tower Connection', 'Run: SELECT caller_imsi, notes FROM phone_records WHERE cell_tower = ''Ennore-North'' AND call_timestamp::text LIKE ''2024-03-14 03:15%'';', 2, 1),
-('l0000000-0000-0000-0000-000000000004', 'Panama Wire', 'Run: SELECT receiver_account, amount, reference_number FROM bank_transactions WHERE sender_account LIKE ''%Scorpion Maritime%'' AND amount = 5000000;', 2, 1),
-('l0000000-0000-0000-0000-000000000005', 'Nellore Toll', 'Run: SELECT registration_number, vehicle_type, registered_owner FROM vehicle_records WHERE sighting_location LIKE ''%Nellore%'';', 2, 1),
-('l0000000-0000-0000-0000-000000000006', 'Decrypted Message', 'Run: SELECT m.sender, m.message_text, p.caller_name FROM messages m JOIN phone_records p ON p.caller_imsi = m.sender WHERE m.message_text LIKE ''%Ranipet%'';', 2, 1),
-('l0000000-0000-0000-0000-000000000007', 'Hawala Payout', 'Run: SELECT reference_number FROM bank_transactions WHERE receiver_account LIKE ''%SR-77%'' AND amount = 20000000;', 2, 1),
-('l0000000-0000-0000-0000-000000000008', 'Autopsy Table', 'Run: SELECT victim_name, cause_of_death, killer_name FROM autopsies WHERE victim_name = ''Viper Selvam'';', 2, 1),
-('l0000000-0000-0000-0000-000000000009', 'Vessel Registry', 'Run: SELECT imo_number FROM shipments WHERE vessel_name = ''MV Scorpia'';', 2, 1),
-('l0000000-0000-0000-0000-000000000010', 'Final Confrontation', 'Run: SELECT killer_name, cause_of_death FROM autopsies WHERE victim_name = ''Rolex'';', 2, 1);
+('c0000000-0000-0000-0000-000000000001', 'Inspect Manifests', 'Run: SELECT container_number FROM shipments WHERE destination LIKE ''%Ennore%'' AND declared_manifest LIKE ''%Industrial%'';', 2, 1),
+('c0000000-0000-0000-0000-000000000002', 'Target Gate 7', 'Run: SELECT card_or_badge_id, action_description FROM access_logs WHERE facility_location LIKE ''%Gate 7%'' AND access_timestamp::text LIKE ''2024-03-14%'';', 2, 1),
+('c0000000-0000-0000-0000-000000000003', 'Tower Connection', 'Run: SELECT caller_imsi, notes FROM phone_records WHERE cell_tower = ''Ennore-North'';', 2, 1),
+('c0000000-0000-0000-0000-000000000004', 'Panama Wire', 'Run: SELECT receiver_account, amount, reference_number FROM bank_transactions WHERE sender_account LIKE ''%Scorpion Maritime%'' AND amount = 5000000;', 2, 1),
+('c0000000-0000-0000-0000-000000000005', 'Nellore Toll', 'Run: SELECT registration_number, vehicle_type, registered_owner FROM vehicle_records WHERE sighting_location LIKE ''%Nellore%'';', 2, 1),
+('c0000000-0000-0000-0000-000000000006', 'Decrypted Message', 'Run: SELECT m.sender, m.message_text, p.caller_name FROM messages m JOIN phone_records p ON p.caller_imsi = m.sender WHERE m.message_text LIKE ''%Ranipet%'';', 2, 1),
+('c0000000-0000-0000-0000-000000000007', 'Hawala Payout', 'Run: SELECT reference_number FROM bank_transactions WHERE receiver_account LIKE ''%SR-77%'' AND amount = 20000000;', 2, 1),
+('c0000000-0000-0000-0000-000000000008', 'Autopsy Table', 'Run: SELECT victim_name, cause_of_death, killer_name FROM autopsies WHERE victim_name = ''Viper Selvam'';', 2, 1),
+('c0000000-0000-0000-0000-000000000009', 'Vessel Registry', 'Run: SELECT imo_number FROM shipments WHERE vessel_name = ''MV Scorpia'';', 2, 1),
+('c0000000-0000-0000-0000-000000000010', 'Final Confrontation', 'Run: SELECT killer_name, cause_of_death FROM autopsies WHERE victim_name = ''Rolex'';', 2, 1);
 
 -- 5. Populate Investigation Data Tables
 
@@ -535,35 +535,35 @@ delete from public.quiz_questions where event_id = 'e0000000-0000-0000-0000-0000
 
 insert into public.quiz_questions (id, event_id, prompt, points, sort_order)
 values
-('q0000000-0000-0000-0000-000000000001', 'e0000000-0000-0000-0000-000000000001', 'Which SQL clause is used to filter rows based on a specified search condition?', 1, 1),
-('q0000000-0000-0000-0000-000000000002', 'e0000000-0000-0000-0000-000000000001', 'Which type of JOIN returns all records from the left table and matched records from the right table?', 1, 2),
-('q0000000-0000-0000-0000-000000000003', 'e0000000-0000-0000-0000-000000000001', 'Which aggregate function returns the total count of non-null rows in a column?', 1, 3),
-('q0000000-0000-0000-0000-000000000004', 'e0000000-0000-0000-0000-000000000001', 'Which clause must be used to filter groups created by a GROUP BY clause?', 1, 4),
-('q0000000-0000-0000-0000-000000000005', 'e0000000-0000-0000-0000-000000000001', 'Which SQL operator tests whether a value falls within an inclusive specified range?', 1, 5);
+('d0000000-0000-0000-0000-000000000001', 'e0000000-0000-0000-0000-000000000001', 'Which SQL clause is used to filter rows based on a specified search condition?', 1, 1),
+('d0000000-0000-0000-0000-000000000002', 'e0000000-0000-0000-0000-000000000001', 'Which type of JOIN returns all records from the left table and matched records from the right table?', 1, 2),
+('d0000000-0000-0000-0000-000000000003', 'e0000000-0000-0000-0000-000000000001', 'Which aggregate function returns the total count of non-null rows in a column?', 1, 3),
+('d0000000-0000-0000-0000-000000000004', 'e0000000-0000-0000-0000-000000000001', 'Which clause must be used to filter groups created by a GROUP BY clause?', 1, 4),
+('d0000000-0000-0000-0000-000000000005', 'e0000000-0000-0000-0000-000000000001', 'Which SQL operator tests whether a value falls within an inclusive specified range?', 1, 5);
 
 insert into public.quiz_options (question_id, option_text, is_correct)
 values
-('q0000000-0000-0000-0000-000000000001', 'WHERE', true),
-('q0000000-0000-0000-0000-000000000001', 'ORDER BY', false),
-('q0000000-0000-0000-0000-000000000001', 'GROUP BY', false),
-('q0000000-0000-0000-0000-000000000001', 'SELECT', false),
+('d0000000-0000-0000-0000-000000000001', 'WHERE', true),
+('d0000000-0000-0000-0000-000000000001', 'ORDER BY', false),
+('d0000000-0000-0000-0000-000000000001', 'GROUP BY', false),
+('d0000000-0000-0000-0000-000000000001', 'SELECT', false),
 
-('q0000000-0000-0000-0000-000000000002', 'LEFT JOIN', true),
-('q0000000-0000-0000-0000-000000000002', 'INNER JOIN', false),
-('q0000000-0000-0000-0000-000000000002', 'RIGHT JOIN', false),
-('q0000000-0000-0000-0000-000000000002', 'CROSS JOIN', false),
+('d0000000-0000-0000-0000-000000000002', 'LEFT JOIN', true),
+('d0000000-0000-0000-0000-000000000002', 'INNER JOIN', false),
+('d0000000-0000-0000-0000-000000000002', 'RIGHT JOIN', false),
+('d0000000-0000-0000-0000-000000000002', 'CROSS JOIN', false),
 
-('q0000000-0000-0000-0000-000000000003', 'COUNT()', true),
-('q0000000-0000-0000-0000-000000000003', 'SUM()', false),
-('q0000000-0000-0000-0000-000000000003', 'TOTAL()', false),
-('q0000000-0000-0000-0000-000000000003', 'AVG()', false),
+('d0000000-0000-0000-0000-000000000003', 'COUNT()', true),
+('d0000000-0000-0000-0000-000000000003', 'SUM()', false),
+('d0000000-0000-0000-0000-000000000003', 'TOTAL()', false),
+('d0000000-0000-0000-0000-000000000003', 'AVG()', false),
 
-('q0000000-0000-0000-0000-000000000004', 'HAVING', true),
-('q0000000-0000-0000-0000-000000000004', 'WHERE', false),
-('q0000000-0000-0000-0000-000000000004', 'ORDER BY', false),
-('q0000000-0000-0000-0000-000000000004', 'FILTER', false),
+('d0000000-0000-0000-0000-000000000004', 'HAVING', true),
+('d0000000-0000-0000-0000-000000000004', 'WHERE', false),
+('d0000000-0000-0000-0000-000000000004', 'ORDER BY', false),
+('d0000000-0000-0000-0000-000000000004', 'FILTER', false),
 
-('q0000000-0000-0000-0000-000000000005', 'BETWEEN', true),
-('q0000000-0000-0000-0000-000000000005', 'IN', false),
-('q0000000-0000-0000-0000-000000000005', 'LIKE', false),
-('q0000000-0000-0000-0000-000000000005', 'EXISTS', false);
+('d0000000-0000-0000-0000-000000000005', 'BETWEEN', true),
+('d0000000-0000-0000-0000-000000000005', 'IN', false),
+('d0000000-0000-0000-0000-000000000005', 'LIKE', false),
+('d0000000-0000-0000-0000-000000000005', 'EXISTS', false);

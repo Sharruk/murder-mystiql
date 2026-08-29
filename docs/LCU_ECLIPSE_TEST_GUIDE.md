@@ -94,8 +94,7 @@
   ```sql
   SELECT call_id, caller_imsi, receiver_imsi, caller_name, cell_tower, call_timestamp, notes
   FROM phone_records
-  WHERE cell_tower = 'Ennore-North'
-    AND call_timestamp::text LIKE '2024-03-14 03:15%';
+  WHERE cell_tower = 'Ennore-North';
   ```
 - **Expected Query Result**:
   | caller_imsi | receiver_imsi | caller_name | cell_tower | notes |
@@ -103,7 +102,7 @@
   | `404-45-89102482` | 404-45-77219003 | [UNKNOWN_BURNOUT] | Ennore-North | Encrypted satellite relay to Shimla Sector |
 - **Correct Answer**: `404-45-89102482`
 - **Unlocked Tables**: `bank_transactions`, `messages`
-- **Hint**: `SELECT caller_imsi, notes FROM phone_records WHERE cell_tower = 'Ennore-North' AND call_timestamp::text LIKE '2024-03-14 03:15%';`
+- **Hint**: `SELECT caller_imsi, notes FROM phone_records WHERE cell_tower = 'Ennore-North';`
 - **Hint Penalty**: +2 minutes
 - **Wrong Answer Penalty**: +5 minutes (plus 60-second lockout)
 - **Red Herring**: Routine worker voice call `404-45-11002233` from Ennore-South tower.

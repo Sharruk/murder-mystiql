@@ -85,6 +85,10 @@ class GameStore:
     async def get_db_pool(self) -> asyncpg.Pool | None:
         if not self.settings.supabase_database_url:
             return None
+        current_loop = asyncio.get_running_loop()
+        if self._db_pool is not None and getattr(self._db_pool, "_loop", None) is not current_loop:
+            self._db_pool = None
+
         if self._db_pool is None:
             try:
                 # Asyncpg connection to Supabase pooler
@@ -95,6 +99,7 @@ class GameStore:
                     max_size=10,
                     command_timeout=self.settings.query_timeout_ms / 1000.0,
                     statement_cache_size=0,  # Required for PgBouncer transaction / session mode
+                    server_settings={"search_path": "investigation, public"},
                 )
                 logger.info("Successfully connected to Supabase PostgreSQL pool.")
             except Exception as exc:
@@ -138,7 +143,7 @@ class GameStore:
         # 10 Investigation Levels
         self.levels = [
             Level(
-                id="l0000000-0000-0000-0000-000000000001",
+                id="c0000000-0000-0000-0000-000000000001",
                 event_id=self.event.id,
                 level_number=1,
                 title="The Ghost Shipment at Ennore",
@@ -155,7 +160,7 @@ class GameStore:
                 active=True,
             ),
             Level(
-                id="l0000000-0000-0000-0000-000000000002",
+                id="c0000000-0000-0000-0000-000000000002",
                 event_id=self.event.id,
                 level_number=2,
                 title="The Security Breach & Customs Bypass",
@@ -170,7 +175,7 @@ class GameStore:
                 active=True,
             ),
             Level(
-                id="l0000000-0000-0000-0000-000000000003",
+                id="c0000000-0000-0000-0000-000000000003",
                 event_id=self.event.id,
                 level_number=3,
                 title="Intercepting the Command Call",
@@ -185,7 +190,7 @@ class GameStore:
                 active=True,
             ),
             Level(
-                id="l0000000-0000-0000-0000-000000000004",
+                id="c0000000-0000-0000-0000-000000000004",
                 event_id=self.event.id,
                 level_number=4,
                 title="The Corrupt Deputy in Theog",
@@ -200,7 +205,7 @@ class GameStore:
                 active=True,
             ),
             Level(
-                id="l0000000-0000-0000-0000-000000000005",
+                id="c0000000-0000-0000-0000-000000000005",
                 event_id=self.event.id,
                 level_number=5,
                 title="The Ambush at Nellore Yard",
@@ -215,7 +220,7 @@ class GameStore:
                 active=True,
             ),
             Level(
-                id="l0000000-0000-0000-0000-000000000006",
+                id="c0000000-0000-0000-0000-000000000006",
                 event_id=self.event.id,
                 level_number=6,
                 title="The State Intelligence Mole",
@@ -230,7 +235,7 @@ class GameStore:
                 active=True,
             ),
             Level(
-                id="l0000000-0000-0000-0000-000000000007",
+                id="c0000000-0000-0000-0000-000000000007",
                 event_id=self.event.id,
                 level_number=7,
                 title="The Hawala Trail",
@@ -244,7 +249,7 @@ class GameStore:
                 active=True,
             ),
             Level(
-                id="l0000000-0000-0000-0000-000000000008",
+                id="c0000000-0000-0000-0000-000000000008",
                 event_id=self.event.id,
                 level_number=8,
                 title="The Siege of Ranipet & Cartel Executions",
@@ -264,7 +269,7 @@ class GameStore:
                 active=True,
             ),
             Level(
-                id="l0000000-0000-0000-0000-000000000009",
+                id="c0000000-0000-0000-0000-000000000009",
                 event_id=self.event.id,
                 level_number=9,
                 title="The Floating Refinery at Royapuram",
@@ -279,7 +284,7 @@ class GameStore:
                 active=True,
             ),
             Level(
-                id="l0000000-0000-0000-0000-000000000010",
+                id="c0000000-0000-0000-0000-000000000010",
                 event_id=self.event.id,
                 level_number=10,
                 title="The Apex Execution & Final Deduction",
@@ -516,16 +521,16 @@ class GameStore:
 
         # Hints
         self.hints = [
-            Hint("h01", "l0000000-0000-0000-0000-000000000001", "Inspect Manifests", "Run: SELECT container_number FROM shipments WHERE destination LIKE '%Ennore%' AND declared_manifest LIKE '%Industrial%';", 2),
-            Hint("h02", "l0000000-0000-0000-0000-000000000002", "Target Gate 7", "Run: SELECT card_or_badge_id, action_description FROM access_logs WHERE facility_location LIKE '%Gate 7%' AND access_timestamp::text LIKE '2024-03-14%';", 2),
-            Hint("h03", "l0000000-0000-0000-0000-000000000003", "Tower Connection", "Run: SELECT caller_imsi, notes FROM phone_records WHERE cell_tower = 'Ennore-North' AND call_timestamp::text LIKE '2024-03-14 03:15%';", 2),
-            Hint("h04", "l0000000-0000-0000-0000-000000000004", "Panama Wire", "Run: SELECT receiver_account, amount, reference_number FROM bank_transactions WHERE sender_account LIKE '%Scorpion Maritime%' AND amount = 5000000;", 2),
-            Hint("h05", "l0000000-0000-0000-0000-000000000005", "Nellore Toll", "Run: SELECT registration_number, vehicle_type, registered_owner FROM vehicle_records WHERE sighting_location LIKE '%Nellore%';", 2),
-            Hint("h06", "l0000000-0000-0000-0000-000000000006", "Decrypted Message", "Run: SELECT m.sender, m.message_text, p.caller_name FROM messages m JOIN phone_records p ON p.caller_imsi = m.sender WHERE m.message_text LIKE '%Ranipet%';", 2),
-            Hint("h07", "l0000000-0000-0000-0000-000000000007", "Hawala Payout", "Run: SELECT reference_number FROM bank_transactions WHERE receiver_account LIKE '%SR-77%' AND amount = 20000000;", 2),
-            Hint("h08", "l0000000-0000-0000-0000-000000000008", "Autopsy Table", "Run: SELECT victim_name, cause_of_death, killer_name FROM autopsies WHERE victim_name = 'Viper Selvam';", 2),
-            Hint("h09", "l0000000-0000-0000-0000-000000000009", "Vessel Registry", "Run: SELECT imo_number FROM shipments WHERE vessel_name = 'MV Scorpia';", 2),
-            Hint("h10", "l0000000-0000-0000-0000-000000000010", "Final Confrontation", "Run: SELECT killer_name, cause_of_death FROM autopsies WHERE victim_name = 'Rolex';", 2),
+            Hint("h01", "c0000000-0000-0000-0000-000000000001", "Inspect Manifests", "Run: SELECT container_number FROM shipments WHERE destination LIKE '%Ennore%' AND declared_manifest LIKE '%Industrial%';", 2),
+            Hint("h02", "c0000000-0000-0000-0000-000000000002", "Target Gate 7", "Run: SELECT card_or_badge_id, action_description FROM access_logs WHERE facility_location LIKE '%Gate 7%' AND access_timestamp::text LIKE '2024-03-14%';", 2),
+            Hint("h03", "c0000000-0000-0000-0000-000000000003", "Tower Connection", "Run: SELECT caller_imsi, notes FROM phone_records WHERE cell_tower = 'Ennore-North' AND call_timestamp::text LIKE '2024-03-14 03:15%';", 2),
+            Hint("h04", "c0000000-0000-0000-0000-000000000004", "Panama Wire", "Run: SELECT receiver_account, amount, reference_number FROM bank_transactions WHERE sender_account LIKE '%Scorpion Maritime%' AND amount = 5000000;", 2),
+            Hint("h05", "c0000000-0000-0000-0000-000000000005", "Nellore Toll", "Run: SELECT registration_number, vehicle_type, registered_owner FROM vehicle_records WHERE sighting_location LIKE '%Nellore%';", 2),
+            Hint("h06", "c0000000-0000-0000-0000-000000000006", "Decrypted Message", "Run: SELECT m.sender, m.message_text, p.caller_name FROM messages m JOIN phone_records p ON p.caller_imsi = m.sender WHERE m.message_text LIKE '%Ranipet%';", 2),
+            Hint("h07", "c0000000-0000-0000-0000-000000000007", "Hawala Payout", "Run: SELECT reference_number FROM bank_transactions WHERE receiver_account LIKE '%SR-77%' AND amount = 20000000;", 2),
+            Hint("h08", "c0000000-0000-0000-0000-000000000008", "Autopsy Table", "Run: SELECT victim_name, cause_of_death, killer_name FROM autopsies WHERE victim_name = 'Viper Selvam';", 2),
+            Hint("h09", "c0000000-0000-0000-0000-000000000009", "Vessel Registry", "Run: SELECT imo_number FROM shipments WHERE vessel_name = 'MV Scorpia';", 2),
+            Hint("h10", "c0000000-0000-0000-0000-000000000010", "Final Confrontation", "Run: SELECT killer_name, cause_of_death FROM autopsies WHERE victim_name = 'Rolex';", 2),
         ]
 
         # Quiz Questions for Preliminary Qualification
@@ -1584,11 +1589,10 @@ class GameStore:
         if pool:
             try:
                 async with pool.acquire() as conn:
-                    # Explicitly set search_path to investigation schema
-                    await conn.execute("SET search_path TO investigation, public;")
-                    # Run query with limit
-                    stmt = f"SELECT * FROM ({safe_query}) AS _q LIMIT {max_rows};"
-                    records = await conn.fetch(stmt)
+                    async with conn.transaction(readonly=True):
+                        await conn.execute("SET LOCAL search_path TO investigation, public;")
+                        stmt = f"SELECT * FROM ({safe_query}) AS _q LIMIT {max_rows};"
+                        records = await conn.fetch(stmt)
                     if records:
                         columns = list(records[0].keys())
                         rows = [[_serialize_cell(val) for val in record.values()] for record in records]
