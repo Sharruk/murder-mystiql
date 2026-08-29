@@ -3,10 +3,19 @@
 
 create extension if not exists pgcrypto;
 
--- Enums
-create type public.event_status as enum ('draft', 'live', 'paused', 'archived');
-create type public.session_status as enum ('IN_PROGRESS', 'COMPLETED', 'FINISHED');
-create type public.answer_type as enum ('text', 'number', 'exact', 'case_insensitive');
+-- Enums (Idempotent creation)
+do $$
+begin
+  if not exists (select 1 from pg_type where typname = 'event_status') then
+    create type public.event_status as enum ('draft', 'live', 'paused', 'archived');
+  end if;
+  if not exists (select 1 from pg_type where typname = 'session_status') then
+    create type public.session_status as enum ('IN_PROGRESS', 'COMPLETED', 'FINISHED');
+  end if;
+  if not exists (select 1 from pg_type where typname = 'answer_type') then
+    create type public.answer_type as enum ('text', 'number', 'exact', 'case_insensitive');
+  end if;
+end $$;
 
 -- Public Event Management Tables
 create table if not exists public.events (

@@ -179,22 +179,22 @@
 - **Objective**: Which corrupt intelligence officer leaked the Ranipet safehouse coordinates via message at 23:50 IST on 2024-04-04?
 - **Clue Shown to Participant**: Check the `messages` table for transmissions mentioning Ranipet on 2024-04-04, and cross-reference with `access_logs` or `characters`.
 - **Tables Available**: `shipments`, `locations`, `access_logs`, `vehicle_records`, `phone_records`, `bank_transactions`, `messages`, `evidence`, `characters`, `relationships`
-- **SQL Concept Tested**: Relational JOIN / subquery between `messages` and `access_logs` / `characters`.
+- **SQL Concept Tested**: Relational JOIN between `messages` (intercepted SMS) and `phone_records` (cellular IMSI registrant).
 - **Solving SQL Query**:
   ```sql
-  SELECT m.sender, m.receiver, m.message_text, a.user_name, a.card_or_badge_id
+  SELECT m.sender, m.receiver, m.message_text, p.caller_name
   FROM messages m
-  LEFT JOIN access_logs a ON a.card_or_badge_id = 'Card #4419'
+  JOIN phone_records p ON p.caller_imsi = m.sender
   WHERE m.message_text LIKE '%Ranipet%'
     AND m.sent_timestamp::text LIKE '2024-04-04 23:50%';
   ```
 - **Expected Query Result**:
-  | sender | user_name | message_text |
+  | sender | caller_name | message_text |
   | :--- | :--- | :--- |
-  | `Card #4419` | `ACP Stephen Raj` | Ranipet Ceramic Factory sector 4 coordinates confirmed. Strike team go. |
+  | `404-22-77610293` | `ACP Stephen Raj` | Target is in Ranipet Tile Works. 5 men inside. Close the perimeter now. |
 - **Correct Answer**: `ACP Stephen Raj`
 - **Unlocked Tables**: `timeline_events`
-- **Hint**: `SELECT m.sender, m.message_text, a.user_name FROM messages m JOIN access_logs a ON a.card_or_badge_id = 'Card #4419' WHERE m.message_text LIKE '%Ranipet%';`
+- **Hint**: `SELECT m.sender, m.message_text, p.caller_name FROM messages m JOIN phone_records p ON p.caller_imsi = m.sender WHERE m.message_text LIKE '%Ranipet%';`
 - **Hint Penalty**: +2 minutes
 - **Wrong Answer Penalty**: +5 minutes (plus 60-second lockout)
 - **Red Herring**: Routine status dispatch from Special Branch Officer Jose.

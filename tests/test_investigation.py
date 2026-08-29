@@ -278,11 +278,12 @@ async def test_full_investigation_authenticated_flow():
             "/api/query/execute",
             json={
                 "session_id": session_id,
-                "query": "SELECT m.sender, m.message_text, a.user_name FROM messages m JOIN access_logs a ON a.card_or_badge_id = 'Card #4419' WHERE m.message_text LIKE '%Ranipet%';",
+                "query": "SELECT m.sender, m.message_text, p.caller_name FROM messages m JOIN phone_records p ON p.caller_imsi = m.sender WHERE m.message_text LIKE '%Ranipet%';",
             },
             headers=headers,
         )
         assert q_res.status_code == 200
+        assert any("Stephen Raj" in str(row) for row in q_res.json()["rows"])
 
         ans_res = await client.post(
             "/api/answer/submit",

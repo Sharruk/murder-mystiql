@@ -521,7 +521,7 @@ class GameStore:
             Hint("h03", "l0000000-0000-0000-0000-000000000003", "Tower Connection", "Run: SELECT caller_imsi, notes FROM phone_records WHERE cell_tower = 'Ennore-North' AND call_timestamp::text LIKE '2024-03-14 03:15%';", 2),
             Hint("h04", "l0000000-0000-0000-0000-000000000004", "Panama Wire", "Run: SELECT receiver_account, amount, reference_number FROM bank_transactions WHERE sender_account LIKE '%Scorpion Maritime%' AND amount = 5000000;", 2),
             Hint("h05", "l0000000-0000-0000-0000-000000000005", "Nellore Toll", "Run: SELECT registration_number, vehicle_type, registered_owner FROM vehicle_records WHERE sighting_location LIKE '%Nellore%';", 2),
-            Hint("h06", "l0000000-0000-0000-0000-000000000006", "Decrypted Message", "Run: SELECT m.sender, m.message_text, a.user_name FROM messages m JOIN access_logs a ON a.card_or_badge_id = 'Card #4419' WHERE m.message_text LIKE '%Ranipet%';", 2),
+            Hint("h06", "l0000000-0000-0000-0000-000000000006", "Decrypted Message", "Run: SELECT m.sender, m.message_text, p.caller_name FROM messages m JOIN phone_records p ON p.caller_imsi = m.sender WHERE m.message_text LIKE '%Ranipet%';", 2),
             Hint("h07", "l0000000-0000-0000-0000-000000000007", "Hawala Payout", "Run: SELECT reference_number FROM bank_transactions WHERE receiver_account LIKE '%SR-77%' AND amount = 20000000;", 2),
             Hint("h08", "l0000000-0000-0000-0000-000000000008", "Autopsy Table", "Run: SELECT victim_name, cause_of_death, killer_name FROM autopsies WHERE victim_name = 'Viper Selvam';", 2),
             Hint("h09", "l0000000-0000-0000-0000-000000000009", "Vessel Registry", "Run: SELECT imo_number FROM shipments WHERE vessel_name = 'MV Scorpia';", 2),
