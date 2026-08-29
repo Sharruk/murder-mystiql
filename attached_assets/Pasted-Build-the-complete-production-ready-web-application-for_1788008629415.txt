@@ -1,0 +1,1340 @@
+Build the complete production-ready web application for an event called:
+
+MURDER MYSTIQL
+
+Repository:
+murder-mystiql
+
+IMPORTANT:
+This phase is ONLY for building the reusable web application/game engine.
+
+DO NOT create any murder story.
+DO NOT create any fictional characters.
+DO NOT create suspects.
+DO NOT create a victim.
+DO NOT create clues.
+DO NOT create investigation levels with actual content.
+DO NOT create answers.
+DO NOT create evidence.
+DO NOT create red herrings.
+DO NOT create a demo murder case.
+DO NOT invent any event storyline.
+
+The actual story and investigation content will be added later.
+
+The application must instead be built as a configurable platform where organizers can later add:
+
+Story
+→ Characters
+→ Locations
+→ Database tables
+→ Relationships
+→ Clues
+→ Levels
+→ Hints
+→ Answers
+→ Evidence
+→ Red herrings
+
+without having to rewrite the application.
+
+==================================================
+1. TECHNOLOGY STACK
+==================================================
+
+Frontend:
+- React
+- Vite
+- TypeScript
+- Tailwind CSS
+
+Backend:
+- Python
+- FastAPI
+
+Database:
+- Supabase PostgreSQL
+
+Storage:
+- Supabase Storage, only where actually needed
+
+Deployment:
+- Vercel
+
+Version control:
+- GitHub
+
+Architecture:
+
+React
+   ↓
+FastAPI REST API
+   ↓
+Supabase PostgreSQL
+
+The frontend must NOT connect directly to PostgreSQL.
+
+The backend is responsible for:
+- game state
+- sessions
+- timer
+- level progression
+- answer validation
+- penalties
+- hints
+- SQL execution
+- leaderboard
+- event configuration
+
+==================================================
+2. NO AUTHENTICATION IN THIS VERSION
+==================================================
+
+This is extremely important.
+
+DO NOT implement:
+
+- Firebase
+- Firebase Auth
+- Supabase Auth
+- Google login
+- email login
+- password login
+- OTP
+- registration
+- student verification
+- @ssn.edu.in restriction
+- account creation
+
+Anyone who has the event URL should be able to access the application.
+
+For now, participants should enter the game using an anonymous game session.
+
+Later, Firebase authentication will be added separately.
+
+Design the architecture so authentication can be added later without rewriting the game engine.
+
+==================================================
+3. APPLICATION PHILOSOPHY
+==================================================
+
+Do NOT build a static landing page.
+
+Build an actual functioning event platform.
+
+The eventual participant flow will be:
+
+ENTER GAME
+↓
+CASE STORY
+↓
+CURRENT CLUE
+↓
+DATABASE SCHEMA
+↓
+SQL QUERY TERMINAL
+↓
+RUN QUERY
+↓
+INSPECT RESULTS
+↓
+SUBMIT ANSWER
+↓
+CORRECT → UNLOCK NEXT LEVEL
+↓
+WRONG → PENALTY
+↓
+CONTINUE INVESTIGATION
+↓
+FINAL LEVEL
+↓
+FINAL ANSWER
+↓
+LEADERBOARD
+
+However, because the story has not been created yet, all actual content must remain configurable/empty.
+
+==================================================
+4. CORE GAME ENGINE
+==================================================
+
+Build a generic investigation game engine.
+
+A game should support:
+
+- event
+- game session
+- levels
+- clues
+- hints
+- available database tables
+- locked database tables
+- answer validation
+- penalties
+- timer
+- leaderboard
+- completion status
+
+Do NOT hardcode specific levels or story content.
+
+The backend should load game content from the database.
+
+==================================================
+5. DATABASE MODEL
+==================================================
+
+Create the application/game-management database schema.
+
+Use proper relational design.
+
+Suggested tables:
+
+events
+game_sessions
+game_levels
+level_tables
+level_hints
+game_progress
+answer_submissions
+hint_usage
+query_logs
+event_config
+leaderboard / leaderboard views where appropriate
+
+You may improve the schema if necessary.
+
+Each level should support fields such as:
+
+- id
+- event_id
+- level_number
+- title
+- description
+- clue
+- answer_type
+- answer
+- penalty configuration
+- active status
+
+IMPORTANT:
+
+Correct answers must NEVER be sent to the frontend.
+
+The backend alone should know the answer.
+
+==================================================
+6. STORY CONTENT MODEL
+==================================================
+
+Create database structures capable of supporting future story content.
+
+Support entities such as:
+
+stories
+characters
+locations
+evidence
+events/timeline entries
+relationships
+red_herrings
+
+But DO NOT populate them with an actual story.
+
+Create only the schema/models required to support them.
+
+Example:
+
+stories
+- id
+- event_id
+- title
+- prologue
+- description
+- status
+
+characters
+- id
+- story_id
+- name
+- role
+- description
+
+locations
+- id
+- story_id
+- name
+- description
+
+evidence
+- id
+- story_id
+- name
+- description
+- type
+
+relationships
+- id
+- story_id
+- source_character
+- target_character
+- relationship_type
+
+red_herrings
+- id
+- story_id
+- title
+- description
+
+Keep the content empty.
+
+==================================================
+7. INVESTIGATION DATABASE SUPPORT
+==================================================
+
+The eventual game will contain an investigation database with tables such as:
+
+suspects
+locations
+access_logs
+phone_records
+messages
+transactions
+vehicle_records
+evidence
+shipments
+etc.
+
+DO NOT create a murder case or populate these with fictional story data now.
+
+Instead, build the system so an organizer can later configure which database tables are available at each level.
+
+The application must support:
+
+AVAILABLE TABLES
+
+and
+
+LOCKED TABLES
+
+without exposing locked table information to participants.
+
+==================================================
+8. SQL QUERY TERMINAL
+==================================================
+
+This is one of the most important parts of the application.
+
+Create a professional SQL editor.
+
+Participants must eventually be able to:
+
+1. Write SQL.
+2. Click RUN QUERY.
+3. Send the query to FastAPI.
+4. Backend validates the query.
+5. Backend executes the query against the designated investigation database.
+6. Return safe results.
+7. Display results in a table.
+
+The UI should resemble a professional coding/query environment.
+
+Include:
+
+- SQL editor
+- syntax highlighting
+- Run Query button
+- Clear button
+- query execution state
+- results table
+- error display
+- row count
+- execution time if appropriate
+
+IMPORTANT:
+
+RUN QUERY and SUBMIT ANSWER are completely separate actions.
+
+Running queries does NOT cause an answer penalty.
+
+Participants should eventually be able to run many queries.
+
+==================================================
+9. SQL SECURITY
+==================================================
+
+Do NOT allow participant queries to freely manipulate the production Supabase database.
+
+Create a safe query execution architecture.
+
+Participants must NOT be able to execute:
+
+DROP
+DELETE
+UPDATE
+INSERT
+ALTER
+TRUNCATE
+CREATE
+GRANT
+REVOKE
+
+or equivalent destructive operations.
+
+Prevent access to:
+
+- PostgreSQL system tables
+- Supabase internal tables
+- application management tables
+- secrets
+- credentials
+- answer keys
+- other participants' sessions
+- administrative data
+
+Implement server-side query validation.
+
+Do NOT rely on frontend restrictions.
+
+Implement:
+
+- statement timeout
+- result row limits
+- query length limits
+- safe error handling
+- connection pooling
+- appropriate rate limiting
+- backend-only database credentials
+
+Prefer a dedicated read-only investigation database role/schema for participant queries.
+
+==================================================
+10. SQL QUERY RESULT SAFETY
+==================================================
+
+Never return internal database information unnecessarily.
+
+If SQL fails, show a useful but safe error.
+
+Example:
+
+"Query error: column does not exist."
+
+Do NOT expose:
+
+- stack traces
+- database passwords
+- connection strings
+- filesystem paths
+- internal implementation details
+- service-role keys
+
+==================================================
+11. ANSWER SUBMISSION ENGINE
+==================================================
+
+Create a generic answer submission system.
+
+Each level will eventually have a configured answer.
+
+Participant UI:
+
+Your Answer:
+[________________]
+
+[ SUBMIT ANSWER ]
+
+Backend validates the answer.
+
+Correct:
+
+{
+    correct: true
+}
+
+Wrong:
+
+{
+    correct: false,
+    lock_seconds: 60,
+    penalty_seconds: 300
+}
+
+Do not expose the correct answer.
+
+Make answer comparison configurable.
+
+Support answer types such as:
+
+- text
+- number
+- exact value
+- case-insensitive text
+- multiple accepted answers if the organizer configures them
+
+==================================================
+12. PENALTY SYSTEM
+==================================================
+
+Build a configurable penalty engine.
+
+Default event rule:
+
+Wrong answer:
+- 1-minute submission lock
+- +5 minutes effective-time penalty
+
+However, DO NOT hardcode these values permanently.
+
+Store them in event configuration.
+
+For example:
+
+wrong_answer_penalty_minutes = 5
+wrong_answer_lock_seconds = 60
+
+The organizer should be able to change them later.
+
+The backend must record every wrong submission.
+
+==================================================
+13. HINT SYSTEM
+==================================================
+
+Build a generic hint system.
+
+Each level can eventually contain:
+
+- zero hints
+- one hint
+- multiple hints
+
+A hint can contain:
+
+- table hint
+- relationship hint
+- evidence hint
+- SQL concept hint
+- query hint
+
+Each hint should have a configurable time penalty.
+
+Do NOT create actual hints now.
+
+Only create the system.
+
+When a participant uses a hint:
+
+- record it
+- apply configured penalty
+- prevent repeated unintended usage if configured
+
+==================================================
+14. TIMER
+==================================================
+
+Create a server-authoritative game timer.
+
+When a participant starts the investigation:
+
+Backend records:
+
+start_time
+
+The frontend displays the timer.
+
+Do NOT trust a browser-supplied timer.
+
+Refreshing the browser must NOT reset the timer.
+
+The backend calculates:
+
+actual duration
+
+based on server timestamps.
+
+Support:
+
+- start
+- pause if the event configuration permits
+- resume
+- finish
+
+Do not implement pause unless needed by the event configuration.
+
+==================================================
+15. EFFECTIVE TIME
+==================================================
+
+Create a scoring engine.
+
+Default formula:
+
+Effective Time =
+Actual Time
++
+Wrong Answer Penalties
++
+Hint Penalties
+
+For wrong answers:
+
+5 minutes × number of wrong submissions
+
+Hint penalties are configurable.
+
+Store:
+
+- start_time
+- finish_time
+- actual_duration
+- wrong_submission_count
+- wrong_answer_penalty
+- hints_used
+- hint_penalty
+- effective_time
+- completion_status
+
+All calculations must happen on the backend.
+
+==================================================
+16. LEVEL UNLOCKING
+==================================================
+
+Create a generic level progression system.
+
+When a participant starts:
+
+Level 1 is available.
+
+When the correct answer for Level 1 is submitted:
+
+Level 2 becomes available.
+
+Continue until the final level.
+
+Do NOT create actual levels now.
+
+The database should determine:
+
+level order
+level title
+clue
+available tables
+hints
+answer
+next level
+
+The frontend should dynamically render whatever levels are configured.
+
+==================================================
+17. DATABASE TABLE ACCESS CONTROL
+==================================================
+
+Create a configurable mapping:
+
+level → available investigation tables
+
+Example structure:
+
+level_tables
+
+- level_id
+- table_name
+- unlock_level
+- is_visible
+
+But DO NOT insert actual murder-investigation tables yet.
+
+Participants should eventually only be able to query tables that their current level/session is allowed to access.
+
+This restriction MUST be enforced on the backend.
+
+It must NOT be implemented only by hiding the table in React.
+
+==================================================
+18. SCHEMA EXPLORER
+==================================================
+
+Create a schema explorer UI.
+
+Eventually it should show:
+
+AVAILABLE TABLES
+
+Table name
+Columns
+Data types
+Primary keys
+Foreign keys
+Relationships
+
+Also show:
+
+LOCKED TABLES
+
+but without revealing sensitive information.
+
+For example:
+
+🔒 Locked
+Unlock at Level 3
+
+Do NOT populate it with actual story tables now.
+
+==================================================
+19. SQL CHEATSHEET
+==================================================
+
+Create a reusable SQL cheatsheet component.
+
+Include:
+
+SELECT
+WHERE
+AND / OR
+LIKE
+IN
+BETWEEN
+ORDER BY
+GROUP BY
+HAVING
+COUNT
+SUM
+AVG
+MIN
+MAX
+JOIN
+INNER JOIN
+LEFT JOIN
+aliases
+subqueries
+CTEs
+
+This is generic SQL help and is independent of the future story.
+
+Make it accessible from the investigation interface.
+
+==================================================
+20. LEADERBOARD
+==================================================
+
+Create a live leaderboard system.
+
+Eventually show:
+
+Rank
+Team Name
+Current Level
+Progress
+Effective Time
+Status
+
+Sort completed teams by effective time.
+
+Do not expose:
+
+- answers
+- hidden clues
+- SQL solution
+- locked table data
+- internal session information
+
+Build this using backend data.
+
+==================================================
+21. ANONYMOUS SESSION SYSTEM
+==================================================
+
+Because authentication does not exist yet, create anonymous game sessions.
+
+When the participant clicks:
+
+ENTER INVESTIGATION
+
+the backend creates a unique session.
+
+Store:
+
+session_id
+event_id
+team/display name if provided
+start_time
+current_level
+progress
+penalties
+hints
+completion state
+
+Use secure session handling.
+
+Do not allow users to manipulate game progress simply by changing frontend state.
+
+==================================================
+22. PARTICIPANT UI
+==================================================
+
+Create a polished investigation interface.
+
+Use a professional dark detective/investigation aesthetic.
+
+Do not overdo animations.
+
+Prioritize usability in a computer lab.
+
+Suggested layout:
+
+TOP BAR
+
+MURDER MYSTIQL
+CURRENT LEVEL
+TIMER
+EFFECTIVE TIME
+TEAM NAME
+
+LEFT PANEL
+
+CASE
+CURRENT CLUE
+HINT
+
+CENTER
+
+SQL EDITOR
+RUN QUERY
+QUERY RESULTS
+
+RIGHT PANEL
+
+DATABASE SCHEMA
+AVAILABLE TABLES
+LOCKED TABLES
+
+BOTTOM / SIDE
+
+ANSWER SUBMISSION
+
+[ Answer ]
+
+[ SUBMIT ANSWER ]
+
+The layout must be configurable and responsive.
+
+Desktop is the primary target.
+
+==================================================
+23. LANDING PAGE
+==================================================
+
+Create a professional landing page.
+
+It should contain:
+
+MURDER MYSTIQL
+
+A short description of the event concept.
+
+A prominent:
+
+ENTER INVESTIGATION
+
+button.
+
+Do NOT mention a specific murder story.
+
+Do NOT create fictional characters.
+
+Do NOT create event-specific clues.
+
+Do NOT create fake statistics.
+
+==================================================
+24. GAME STATES
+==================================================
+
+Support these states:
+
+NOT_STARTED
+IN_PROGRESS
+LOCKED
+COMPLETED
+FINISHED
+
+The UI should respond appropriately to each state.
+
+==================================================
+25. ADMIN / ORGANIZER INTERFACE
+==================================================
+
+Build the foundation for an organizer/admin interface.
+
+For the current MVP, there is no participant authentication.
+
+However, the admin architecture should be separated from participant functionality.
+
+The organizer system should eventually support:
+
+- event configuration
+- level management
+- clue management
+- hint management
+- answer configuration
+- table unlocking configuration
+- penalty configuration
+- participant/session monitoring
+- leaderboard monitoring
+- result export
+- event start/stop
+- reset session
+
+Do NOT create actual story content.
+
+Do NOT create fake case data.
+
+Admin authentication can remain minimal/configurable for now.
+
+Make it easy to add proper authentication later.
+
+==================================================
+26. QUIZ MODULE
+==================================================
+
+Create a reusable DBMS/SQL quiz module.
+
+The actual quiz questions do NOT need to be populated now.
+
+Build support for:
+
+questions
+options
+correct answer
+points
+time limit
+quiz attempts
+score
+ranking
+
+The quiz should remain separate from the investigation engine.
+
+The organizers may later decide to use this application or an external platform such as Wayground/Kahoot for qualification.
+
+==================================================
+27. DATABASE MIGRATIONS
+==================================================
+
+Create proper SQL migrations/schema files.
+
+Do not manually depend on database state.
+
+Provide:
+
+database/schema.sql
+
+and seed structure if required.
+
+Since no story exists yet, seed only system/configuration data that is safe and generic.
+
+Do NOT seed a murder case.
+
+==================================================
+28. SUPABASE ENVIRONMENT VARIABLES
+==================================================
+
+Use environment variables.
+
+Backend:
+
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+SUPABASE_DATABASE_URL=
+
+Frontend should NOT receive service-role credentials.
+
+Do not commit secrets.
+
+Create:
+
+.env.example
+
+containing placeholders only.
+
+Never hardcode credentials.
+
+==================================================
+29. PROJECT STRUCTURE
+==================================================
+
+Use a clean structure similar to:
+
+murder-mystiql/
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── hooks/
+│   │   ├── services/
+│   │   ├── types/
+│   │   ├── utils/
+│   │   └── ...
+│   ├── package.json
+│   └── ...
+│
+├── backend/
+│   ├── app/
+│   │   ├── main.py
+│   │   ├── api/
+│   │   ├── models/
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   ├── database/
+│   │   ├── security/
+│   │   └── ...
+│   ├── requirements.txt
+│   └── ...
+│
+├── database/
+│   ├── schema.sql
+│   └── migrations/
+│
+├── .env.example
+├── README.md
+└── deployment configuration
+
+You may improve this structure if technically appropriate.
+
+==================================================
+30. API DESIGN
+==================================================
+
+Create clean FastAPI endpoints.
+
+Suggested endpoints:
+
+GET
+/api/health
+
+POST
+/api/game/start
+
+GET
+/api/game/state
+
+GET
+/api/game/levels
+
+GET
+/api/game/level/{level_id}
+
+GET
+/api/schema/tables
+
+GET
+/api/schema/table/{table_name}
+
+POST
+/api/query/execute
+
+POST
+/api/answer/submit
+
+POST
+/api/hint/use
+
+GET
+/api/leaderboard
+
+Admin endpoints can use:
+
+/api/admin/...
+
+Use Pydantic request/response models.
+
+Validate all inputs.
+
+Do not expose sensitive fields.
+
+==================================================
+31. SECURITY ARCHITECTURE
+==================================================
+
+Implement security from the beginning.
+
+Important rules:
+
+- Frontend is untrusted.
+- Backend is authoritative.
+- Never trust frontend timer.
+- Never trust frontend level.
+- Never trust frontend score.
+- Never trust frontend penalty count.
+- Never trust frontend completion status.
+- Never expose answer keys.
+- Never expose service-role credentials.
+- Never allow participant access to admin data.
+- Never allow participant SQL to modify the database.
+
+==================================================
+32. PERFORMANCE
+==================================================
+
+Eventually approximately 30 participants may use the main investigation simultaneously.
+
+The backend must be designed for concurrent requests.
+
+Pay special attention to:
+
+- PostgreSQL connection pooling
+- query timeouts
+- concurrent SQL requests
+- result limits
+- API response size
+- efficient database queries
+
+Do not create unnecessary long-lived database connections.
+
+==================================================
+33. ERROR HANDLING
+==================================================
+
+Implement proper error handling throughout.
+
+Frontend:
+- loading states
+- error states
+- empty states
+- network failure handling
+
+Backend:
+- validation errors
+- database errors
+- SQL errors
+- session errors
+- unauthorized operations
+- unexpected errors
+
+Never expose internal stack traces to participants.
+
+==================================================
+34. NO STORY / NO DEMO DATA
+==================================================
+
+This requirement overrides everything else.
+
+At the end of this phase, the application should NOT contain:
+
+Leo
+Rolex
+Dilli
+Vikram
+any other fictional character
+any murder
+any victim
+any killer
+any crime timeline
+any story-specific database rows
+any actual clues
+any actual answers
+any red herrings
+
+Do not invent placeholders that look like real story content.
+
+Use empty states such as:
+
+"No investigation case has been configured yet."
+
+"No levels have been added."
+
+"No clues available."
+
+This is intentional.
+
+==================================================
+35. FUTURE CONTENT IMPORT
+==================================================
+
+The application must be designed so that later we can provide a finalized story and convert it into:
+
+- story record
+- characters
+- locations
+- timeline
+- investigation tables
+- database rows
+- clues
+- levels
+- hints
+- answers
+- evidence
+- red herrings
+- relationships
+
+The core frontend and backend should not need to be rewritten when this happens.
+
+==================================================
+36. TESTING
+==================================================
+
+Before considering this phase complete, test:
+
+Frontend:
+- builds successfully
+- runs locally
+- all pages render
+- navigation works
+- responsive desktop UI works
+
+Backend:
+- FastAPI starts
+- health endpoint works
+- API validation works
+- database connection works
+- anonymous session creation works
+
+Game engine:
+- session creation
+- timer
+- level state
+- level unlocking logic
+- answer submission logic
+- wrong-answer penalty
+- submission lock
+- hint penalty
+- effective-time calculation
+- leaderboard calculation
+
+SQL engine:
+- query endpoint works
+- safe SELECT queries work
+- dangerous queries are blocked
+- timeout works
+- result limits work
+- SQL errors are handled safely
+- answer keys cannot be queried
+
+Security:
+- frontend cannot access service-role key
+- frontend cannot manipulate score
+- frontend cannot manipulate timer
+- frontend cannot unlock levels
+- participant cannot access admin data
+- participant cannot access locked investigation tables
+
+Do not claim something is secure without actually testing it.
+
+==================================================
+37. README
+==================================================
+
+Create a detailed README explaining:
+
+- project overview
+- architecture
+- frontend setup
+- backend setup
+- Supabase setup
+- environment variables
+- database migration
+- local development
+- production deployment
+- Vercel configuration
+- API structure
+- SQL execution architecture
+- security architecture
+- how future story content will be added
+- how Firebase authentication can be added later
+
+==================================================
+38. VERCEL DEPLOYMENT
+==================================================
+
+Prepare the application for Vercel deployment.
+
+The frontend and FastAPI backend should be deployable reliably.
+
+Do not assume the application will only run locally.
+
+Provide appropriate Vercel configuration.
+
+Document all required environment variables.
+
+==================================================
+39. DESIGN QUALITY
+==================================================
+
+The application should look like a real event platform.
+
+Use:
+
+- professional typography
+- dark investigative theme
+- clear hierarchy
+- subtle animations
+- excellent spacing
+- clear buttons
+- readable SQL editor
+- polished result tables
+- useful empty states
+- clear error messages
+
+Avoid:
+
+- excessive gradients
+- excessive animations
+- unnecessary cards everywhere
+- generic SaaS dashboard appearance
+- fake content
+- stock images
+- meaningless statistics
+
+The SQL terminal and investigation workspace should be the visual focus.
+
+==================================================
+40. FINAL EXECUTION INSTRUCTION
+==================================================
+
+Do not simply describe what should be built.
+
+Actually build it.
+
+First inspect the existing repository.
+
+Then implement the complete platform.
+
+Do not ask me to manually create every file.
+
+Do not stop after creating the frontend.
+
+Do not stop after creating the database schema.
+
+Do not stop after creating the FastAPI backend.
+
+Connect everything together.
+
+Run the application.
+
+Test the complete flow.
+
+Fix errors.
+
+Verify the production build.
+
+At the end, report:
+
+1. What was implemented
+2. Project structure
+3. Database schema
+4. API endpoints
+5. Environment variables required
+6. How to run locally
+7. How to connect Supabase
+8. How to deploy to Vercel
+9. Security measures implemented
+10. What remains to be added when the actual Murder MystiQL story is finalized
+
+REMEMBER:
+
+BUILD THE ENGINE.
+
+DO NOT BUILD THE STORY.
+
+The final application should be a fully functioning, story-independent Murder MystiQL investigation platform ready for us to populate with the actual case later.
